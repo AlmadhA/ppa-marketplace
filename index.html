@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PPA Market Place</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+  /* ================================================================
+     GANTI DI SINI:
+     - Warna dasar situs ada di :root, gampang diubah kalau perlu.
+     - Logo situs ada di bagian HTML dengan komentar "GANTI LOGO DI SINI"
+     ================================================================ */
+
+  :root{
+    --bg: #fcfcfb;
+    --ink: #1a1a1e;
+    --ink-soft: #74747c;
+    --line: #e6e6ea;
+    --card-bg: #ffffff;
+    --pink: #e31c7f;
+    --pink-dark: #b91367;
+    --cyan: #14a7c9;
+    --cyan-soft: #e4f6fa;
+    --cyan-ink: #0d7a93;
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', system-ui, sans-serif;
+    line-height: 1.5;
+  }
+
+  a{ color: inherit; }
+
+  .wrap{
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* ---------- Header ---------- */
+
+  header{
+    border-bottom: 1px solid var(--line);
+    padding: 28px 0 24px;
+  }
+
+  .header-row{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  /* GANTI LOGO DI SINI: ganti isi div ini dengan <img src="images/logo.png" alt="Logo PPA"> kalau sudah punya file logo */
+  .site-logo{
+    width: 56px;
+    height: 56px;
+    flex-shrink: 0;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--pink), var(--cyan));
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 19px;
+  }
+
+  .site-title h1{
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 25px;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  .site-title p{
+    margin: 4px 0 0;
+    color: var(--ink-soft);
+    font-size: 14.5px;
+  }
+
+  .daftar-btn{
+    margin-left: auto;
+    text-decoration: none;
+    background: var(--ink);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 999px;
+    font-size: 14.5px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .daftar-btn:hover{ background: var(--pink); }
+
+  /* ---------- Filter bar ---------- */
+
+  .filter-bar{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 20px 0;
+    flex-wrap: wrap;
+  }
+
+  .filter-bar input,
+  .filter-bar select{
+    font-family: inherit;
+    font-size: 14.5px;
+    padding: 9px 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--ink);
+  }
+
+  .filter-bar input{ flex: 1; min-width: 180px; }
+
+  .filter-count{
+    color: var(--ink-soft);
+    font-size: 13.5px;
+    margin-left: auto;
+  }
+
+  /* ---------- Grid & kartu ---------- */
+
+  main{ padding-bottom: 60px; }
+
+  .grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 18px;
+  }
+
+  .card{
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--card-bg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 1px 2px rgba(20,20,25,0.03);
+  }
+
+  .card-photos{
+    position: relative;
+    height: 160px;
+    background: var(--cyan-soft);
+  }
+
+  .card-photos .track{
+    display: flex;
+    height: 100%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .card-photos .track::-webkit-scrollbar{ display: none; }
+
+  .card-photos .track img{
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .card-photos .nav{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(38,36,32,0.55);
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .card-photos .nav.prev{ left: 8px; }
+  .card-photos .nav.next{ right: 8px; }
+
+  .card-photos .no-photo{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cyan-ink);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .card-body{
+    padding: 14px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+  }
+
+  .card-top{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .card-logo{
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid var(--line);
+    flex-shrink: 0;
+  }
+
+  .card-logo.fallback{
+    background: linear-gradient(135deg, var(--pink), var(--cyan));
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  .card-name{ font-weight: 600; font-size: 15.5px; }
+
+  .card-tag{
+    font-size: 12.5px;
+    color: var(--cyan-ink);
+    background: var(--cyan-soft);
+    padding: 2px 9px;
+    border-radius: 999px;
+    display: inline-block;
+    width: fit-content;
+    font-weight: 500;
+  }
+
+  .card-desc{
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    flex: 1;
+  }
+
+  .card-wa{
+    text-decoration: none;
+    text-align: center;
+    background: var(--pink);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 9px 0;
+    border-radius: 8px;
+  }
+
+  .card-wa:hover{ background: var(--pink-dark); }
+
+  /* ---------- Empty state ---------- */
+
+  .empty{
+    border: 1px dashed var(--line);
+    border-radius: 10px;
+    padding: 50px 20px;
+    text-align: center;
+    color: var(--ink-soft);
+  }
+
+  .empty p{ margin: 6px 0; }
+
+  .empty a{ color: var(--cyan-ink); font-weight: 500; }
+
+  /* ---------- Footer ---------- */
+
+  footer{
+    border-top: 1px solid var(--line);
+    padding: 22px 0;
+    color: var(--ink-soft);
+    font-size: 13px;
+  }
+
+  @media (max-width: 480px){
+    .daftar-btn{ margin-left: 0; }
+    .site-title h1{ font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <div class="header-row">
+
+    <!-- GANTI LOGO DI SINI: ganti div di bawah dengan <img class="site-logo" src="images/logo.png" alt="Logo PPA Market Place"> kalau sudah ada file logonya -->
+    <div class="site-logo">PPA</div>
+
+    <div class="site-title">
+      <h1>PPA Market Place</h1>
+      <p>Tempat warga PPA memperkenalkan usahanya</p>
+    </div>
+
+    <!-- GANTI LINK DI SINI: ganti href="#" dengan link Google Form pendaftaran seller -->
+    <a class="daftar-btn" href="#" target="_blank" rel="noopener">Daftar jualan di sini</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="filter-bar">
+    <input type="text" id="search" placeholder="Cari nama usaha...">
+    <select id="kategori">
+      <option value="">Semua kategori</option>
+    </select>
+    <span class="filter-count" id="count"></span>
+  </div>
+
+  <div id="grid" class="grid"></div>
+</main>
+
+<footer class="wrap">
+  Marketplace warga PPA. Dikelola secara mandiri, bukan aplikasi resmi jual beli.
+</footer>
+
+<script>
+  let sellers = [];
+
+  function waLink(nomor){
+    const bersih = String(nomor).replace(/[^0-9]/g, '');
+    return `https://wa.me/${bersih}`;
+  }
+
+  function initial(nama){
+    return (nama || '?').trim().charAt(0).toUpperCase();
+  }
+
+  function renderCard(s){
+    const foto = Array.isArray(s.foto) ? s.foto.filter(Boolean) : [];
+
+    let photosHTML;
+    if (foto.length > 0){
+      photosHTML = `
+        <div class="track">
+          ${foto.map(src => `<img src="${src}" alt="${s.nama}" loading="lazy">`).join('')}
+        </div>
+        ${foto.length > 1 ? `
+          <button class="nav prev" aria-label="Sebelumnya">‹</button>
+          <button class="nav next" aria-label="Berikutnya">›</button>
+        ` : ''}
+      `;
+    } else {
+      photosHTML = `<div class="no-photo">Belum ada foto produk</div>`;
+    }
+
+    const logoHTML = s.logo
+      ? `<img class="card-logo" src="${s.logo}" alt="Logo ${s.nama}">`
+      : `<div class="card-logo fallback">${initial(s.nama)}</div>`;
+
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="card-photos">${photosHTML}</div>
+      <div class="card-body">
+        <div class="card-top">
+          ${logoHTML}
+          <div>
+            <div class="card-name">${s.nama || 'Tanpa nama'}</div>
+            ${s.kategori ? `<span class="card-tag">${s.kategori}</span>` : ''}
+          </div>
+        </div>
+        ${s.deskripsi ? `<div class="card-desc">${s.deskripsi}</div>` : ''}
+        <a class="card-wa" href="${waLink(s.whatsapp)}" target="_blank" rel="noopener">Chat via WhatsApp</a>
+      </div>
+    `;
+
+    const track = card.querySelector('.track');
+    const prev = card.querySelector('.prev');
+    const next = card.querySelector('.next');
+    if (track && prev && next){
+      prev.addEventListener('click', () => track.scrollBy({ left: -track.clientWidth, behavior: 'smooth' }));
+      next.addEventListener('click', () => track.scrollBy({ left: track.clientWidth, behavior: 'smooth' }));
+    }
+
+    return card;
+  }
+
+  function renderEmpty(container, ada){
+    const msg = ada
+      ? '<p>Tidak ada usaha yang cocok dengan pencarian ini.</p>'
+      : '<p>Belum ada yang buka lapak di sini.</p><p>Jadi yang pertama — isi form pendaftaran di atas.</p>';
+    container.innerHTML = `<div class="empty">${msg}</div>`;
+  }
+
+  function applyFilter(){
+    const kw = document.getElementById('search').value.trim().toLowerCase();
+    const kat = document.getElementById('kategori').value;
+
+    const hasil = sellers.filter(s => {
+      const cocokKw = !kw || (s.nama || '').toLowerCase().includes(kw);
+      const cocokKat = !kat || s.kategori === kat;
+      return cocokKw && cocokKat;
+    });
+
+    const grid = document.getElementById('grid');
+    grid.innerHTML = '';
+    document.getElementById('count').textContent = sellers.length
+      ? `${hasil.length} dari ${sellers.length} usaha`
+      : '';
+
+    if (hasil.length === 0){
+      renderEmpty(grid, sellers.length > 0);
+      return;
+    }
+    hasil.forEach(s => grid.appendChild(renderCard(s)));
+  }
+
+  function isiKategori(){
+    const select = document.getElementById('kategori');
+    const kategoriUnik = [...new Set(sellers.map(s => s.kategori).filter(Boolean))].sort();
+    kategoriUnik.forEach(k => {
+      const opt = document.createElement('option');
+      opt.value = k;
+      opt.textContent = k;
+      select.appendChild(opt);
+    });
+  }
+
+  fetch('data/sellers.json')
+    .then(res => res.json())
+    .then(data => {
+      sellers = Array.isArray(data) ? data : [];
+      isiKategori();
+      applyFilter();
+    })
+    .catch(() => {
+      renderEmpty(document.getElementById('grid'), false);
+    });
+
+  document.getElementById('search').addEventListener('input', applyFilter);
+  document.getElementById('kategori').addEventListener('change', applyFilter);
+</script>
+
+</body>
+</html>

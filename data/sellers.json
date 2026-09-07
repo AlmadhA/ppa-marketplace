@@ -1,0 +1,20 @@
+[
+  {
+    "id": "seller-0001",
+    "nama": "Me Gacoan",
+    "kategori": "Makanan",
+    "deskripsi": "Mie pedas kekinian, banyak level pedas dan varian topping.",
+    "whatsapp": "6281234567890",
+    "logo": "images/gacoan.png",
+    "foto": []
+  },
+  {
+    "id": "seller-0002",
+    "nama": "PT Pesta Pora Abadi",
+    "kategori": "Jasa",
+    "deskripsi": "Ini contoh data. Ganti dengan deskripsi asli atau hapus blok ini.",
+    "whatsapp": "6281234567891",
+    "logo": "images/pesta-pora-abadi.png",
+    "foto": []
+  }
+]
