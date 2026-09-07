@@ -3,6 +3,7 @@
     "id": "toko_diani",
     "nama": "Toko Diani",
     "kategori": "Snack",
+    "tag": ["Pedas", "Manis", "Gurih"],
     "deskripsi": "Jajanan Jadul, jajanan kecil murah.",
     "whatsapp": "62881024397630",
     "logo": "images/toko-diani/logo.jpeg",
