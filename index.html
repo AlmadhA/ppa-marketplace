@@ -58,7 +58,7 @@
     align-items: center;
     justify-content: center;
     z-index: 9999;
-    transition: opacity 0.4s ease, visibility 0.4s ease;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
   }
 
   #loading-screen.fade-out {
@@ -571,15 +571,23 @@
 
 <script>
   let sellers = [];
+  const MIN_LOADING_TIME = 3500; // Minimal durasi loading: 3.5 detik (3500 md)
+  const startTime = Date.now();
 
   function hideLoadingScreen() {
-    const loader = document.getElementById('loading-screen');
-    if (loader) {
-      loader.classList.add('fade-out');
-      setTimeout(() => {
-        loader.style.display = 'none';
-      }, 400);
-    }
+    const elapsedTime = Date.now() - startTime;
+    const remainingTime = Math.max(0, MIN_LOADING_TIME - elapsedTime);
+
+    // Menunggu sisa waktu hingga genap minimal 3.5 detik
+    setTimeout(() => {
+      const loader = document.getElementById('loading-screen');
+      if (loader) {
+        loader.classList.add('fade-out');
+        setTimeout(() => {
+          loader.style.display = 'none';
+        }, 500);
+      }
+    }, remainingTime);
   }
 
   function preloadImages(imageUrls) {
@@ -591,7 +599,7 @@
         const img = new Image();
         img.src = url;
         img.onload = resolve;
-        img.onerror = resolve; // Tetap lanjut meski ada gambar error
+        img.onerror = resolve;
       });
     });
     return Promise.all(promises);
@@ -840,10 +848,8 @@
       applyFilter();
       router();
 
-      // Kumpulkan semua foto pertama dari setiap toko untuk di-preload
       const fotoPreload = sellers.map(s => Array.isArray(s.foto) ? s.foto[0] : null).filter(Boolean);
       
-      // Tunggu hingga foto-foto utama selesai dimuat, lalu hilangkan layar loading
       preloadImages(fotoPreload).then(() => {
         hideLoadingScreen();
       });
