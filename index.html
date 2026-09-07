@@ -44,6 +44,52 @@
     padding: 0 20px;
   }
 
+  /* ---------- Loading Screen Overlay ---------- */
+
+  #loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+  }
+
+  #loading-screen.fade-out {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .loading-logo {
+    width: 90px;
+    height: auto;
+    max-height: 90px;
+    object-fit: contain;
+    animation: pulse 1.5s infinite ease-in-out;
+  }
+
+  .loading-text {
+    margin-top: 20px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink);
+    text-align: center;
+    padding: 0 20px;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); opacity: 0.9; }
+    50% { transform: scale(1.08); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.9; }
+  }
+
   /* ---------- Header ---------- */
 
   header{
@@ -58,7 +104,6 @@
     flex-wrap: wrap;
   }
 
-  /* FIX: Logo PPA Marketplace agar tidak gepeng/terpotong */
   .site-logo{
     width: auto;
     height: 52px;
@@ -190,7 +235,6 @@
     cursor: pointer;
   }
 
-  /* Preview Gambar di Beranda (Home) */
   .card-photos{
     position: relative;
     height: 180px;
@@ -262,7 +306,6 @@
     gap: 10px;
   }
 
-  /* FIX: Logo Seller agar aman jika gambar error */
   .card-logo{
     width: 38px;
     height: 38px;
@@ -328,14 +371,13 @@
 
   .back-link:hover{ color: var(--pink); }
 
-  /* FIX: Tampilan Gambar Katalog Detail (Portrait + Tidak Terpotong) */
   .detail-photos{
     position: relative;
     width: 100%;
-    height: 480px; /* Ukuran portrait tinggi untuk layar HP */
+    height: 480px;
     border-radius: 16px;
     overflow: hidden;
-    background: #111111; /* Latar gelap netral */
+    background: #111111;
   }
 
   .detail-photos .track{
@@ -352,7 +394,7 @@
     scroll-snap-align: start;
     width: 100%;
     height: 100%;
-    object-fit: contain; /* PENTING: Gambar tampil utuh 100% tanpa terpotong */
+    object-fit: contain;
     object-position: center;
   }
 
@@ -475,15 +517,20 @@
   @media (max-width: 480px){
     .daftar-btn{ margin-left: 0; }
     .site-title h1{ font-size: 22px; }
-    .detail-photos{ height: 400px; } /* Penyesuaian tinggi di HP kecil */
+    .detail-photos{ height: 400px; }
   }
 </style>
 </head>
 <body>
 
+<!-- LAYAR LOADING WELCOME -->
+<div id="loading-screen">
+  <img class="loading-logo" src="images/logo-ppamarketplace.png" alt="PPA Marketplace Logo">
+  <div class="loading-text">Sebentar ya toko-tokonya lagi disiapin...</div>
+</div>
+
 <header class="wrap">
   <div class="header-row">
-    <!-- REVISI LOGO PPA MARKETPLACE -->
     <img class="site-logo" src="images/logo-ppamarketplace.png" alt="PPA Market Place">
 
     <div class="site-title">
@@ -491,7 +538,6 @@
       <p>Tempat warga PPA memperkenalkan usahanya</p>
     </div>
 
-    <!-- LINK FORM PENDAFTARAN -->
     <a class="daftar-btn" href="#" target="_blank" rel="noopener">Daftar jualan di sini</a>
   </div>
 </header>
@@ -525,6 +571,31 @@
 
 <script>
   let sellers = [];
+
+  function hideLoadingScreen() {
+    const loader = document.getElementById('loading-screen');
+    if (loader) {
+      loader.classList.add('fade-out');
+      setTimeout(() => {
+        loader.style.display = 'none';
+      }, 400);
+    }
+  }
+
+  function preloadImages(imageUrls) {
+    if (!imageUrls || imageUrls.length === 0) {
+      return Promise.resolve();
+    }
+    const promises = imageUrls.map(url => {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.src = url;
+        img.onload = resolve;
+        img.onerror = resolve; // Tetap lanjut meski ada gambar error
+      });
+    });
+    return Promise.all(promises);
+  }
 
   function waLink(nomor){
     const bersih = String(nomor).replace(/[^0-9]/g, '');
@@ -768,9 +839,18 @@
       isiMood();
       applyFilter();
       router();
+
+      // Kumpulkan semua foto pertama dari setiap toko untuk di-preload
+      const fotoPreload = sellers.map(s => Array.isArray(s.foto) ? s.foto[0] : null).filter(Boolean);
+      
+      // Tunggu hingga foto-foto utama selesai dimuat, lalu hilangkan layar loading
+      preloadImages(fotoPreload).then(() => {
+        hideLoadingScreen();
+      });
     })
     .catch(() => {
       renderEmpty(document.getElementById('grid'), false);
+      hideLoadingScreen();
     });
 
   document.getElementById('search').addEventListener('input', applyFilter);
