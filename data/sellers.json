@@ -1,12 +1,24 @@
 [
   {
-    "id": "seller-0001",
-    "nama": "Me Gacoan",
-    "kategori": "Makanan",
-    "deskripsi": "Mie pedas kekinian, banyak level pedas dan varian topping.",
-    "whatsapp": "6281234567890",
-    "logo": "images/gacoan.png",
-    "foto": []
+    "id": "toko_diani",
+    "nama": "Toko Diani",
+    "kategori": "Snack",
+    "deskripsi": "Jajanan Jadul, jajanan kecil murah.",
+    "whatsapp": "62881024397630",
+    "logo": "images/Toko Diani/Logo.png",
+    "foto": [
+      "images/Toko Diani/Katalog/1.jpg",
+      "images/Toko Diani/Katalog/2.jpg",
+      "images/Toko Diani/Katalog/3.jpg",
+      "images/Toko Diani/Katalog/4.jpg",
+      "images/Toko Diani/Katalog/5.jpg",
+      "images/Toko Diani/Katalog/6.jpg",
+      "images/Toko Diani/Katalog/7.jpg",
+      "images/Toko Diani/Katalog/8.jpg",
+      "images/Toko Diani/Katalog/9.jpg",
+      "images/Toko Diani/Katalog/10.jpg",
+      "images/Toko Diani/Katalog/11.jpg",
+      "images/Toko Diani/Katalog/12.jpg"
   },
   {
     "id": "seller-0002",
