@@ -104,6 +104,49 @@
 
   .daftar-btn:hover{ background: var(--pink); }
 
+  .hidden{ display: none !important; }
+
+  /* ---------- Mood box ---------- */
+
+  .mood-box{
+    background: var(--cyan-soft);
+    border-radius: 18px;
+    padding: 20px 22px;
+    margin-top: 22px;
+  }
+
+  .mood-box h2{
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 17px;
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .mood-options{
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .mood-chip{
+    font-family: inherit;
+    font-size: 13.5px;
+    font-weight: 500;
+    padding: 7px 15px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .mood-chip.active{
+    background: var(--pink);
+    border-color: var(--pink);
+    color: #fff;
+  }
+
   /* ---------- Filter bar ---------- */
 
   .filter-bar{
@@ -151,6 +194,7 @@
     display: flex;
     flex-direction: column;
     box-shadow: 0 1px 2px rgba(20,20,25,0.03);
+    cursor: pointer;
   }
 
   .card-photos{
@@ -272,6 +316,133 @@
 
   .card-wa:hover{ background: var(--pink-dark); }
 
+  /* ---------- Halaman detail seller ---------- */
+
+  .back-link{
+    display: inline-block;
+    text-decoration: none;
+    color: var(--ink-soft);
+    font-size: 14px;
+    margin: 22px 0 16px;
+  }
+
+  .back-link:hover{ color: var(--pink); }
+
+  .detail-photos{
+    position: relative;
+    height: 320px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--cyan-soft);
+  }
+
+  .detail-photos .track{
+    display: flex;
+    height: 100%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .detail-photos .track::-webkit-scrollbar{ display: none; }
+
+  .detail-photos .track img{
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .detail-photos .no-photo{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cyan-ink);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+  }
+
+  .detail-photos .dots{
+    position: absolute;
+    bottom: 12px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .detail-photos .dot{
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.6);
+  }
+
+  .detail-photos .dot.active{ background: #fff; }
+
+  .detail-head{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 20px;
+  }
+
+  .detail-logo{
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 1px solid var(--line);
+    flex-shrink: 0;
+  }
+
+  .detail-logo.fallback{
+    background: linear-gradient(135deg, var(--pink), var(--cyan));
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+  }
+
+  .detail-head h1{
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    margin: 0 0 6px;
+  }
+
+  .chip-row{
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .detail-desc{
+    font-size: 15px;
+    color: var(--ink-soft);
+    margin: 18px 0;
+  }
+
+  .detail-wa{
+    display: inline-block;
+    text-decoration: none;
+    text-align: center;
+    background: var(--pink);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 13px 28px;
+    border-radius: 999px;
+    margin-bottom: 40px;
+  }
+
+  .detail-wa:hover{ background: var(--pink-dark); }
+
   /* ---------- Empty state ---------- */
 
   .empty{
@@ -305,9 +476,7 @@
 
 <header class="wrap">
   <div class="header-row">
-
-    <!-- GANTI LOGO DI SINI: ganti div di bawah dengan <img class="site-logo" src="images/logo.png" alt="Logo PPA Market Place"> kalau sudah ada file logonya -->
-    <div class="site-logo">PPA</div>
+    <img class="site-logo" src="images/logo-ppamarketplace.png" alt="PPA Market Place">
 
     <div class="site-title">
       <h1>PPA Market Place</h1>
@@ -320,15 +489,26 @@
 </header>
 
 <main class="wrap">
-  <div class="filter-bar">
-    <input type="text" id="search" placeholder="Cari nama usaha...">
-    <select id="kategori">
-      <option value="">Semua kategori</option>
-    </select>
-    <span class="filter-count" id="count"></span>
+
+  <div id="view-home">
+    <section class="mood-box">
+      <h2 id="mood-question">Moodnya lagi pengen apa nih?</h2>
+      <div class="mood-options" id="mood-options"></div>
+    </section>
+
+    <div class="filter-bar">
+      <input type="text" id="search" placeholder="Cari nama usaha...">
+      <select id="kategori">
+        <option value="">Semua kategori</option>
+      </select>
+      <span class="filter-count" id="count"></span>
+    </div>
+
+    <div id="grid" class="grid"></div>
   </div>
 
-  <div id="grid" class="grid"></div>
+  <div id="view-detail" class="hidden"></div>
+
 </main>
 
 <footer class="wrap">
@@ -389,10 +569,19 @@
     const track = card.querySelector('.track');
     const prev = card.querySelector('.prev');
     const next = card.querySelector('.next');
+    const waBtn = card.querySelector('.card-wa');
+
     if (track && prev && next){
-      prev.addEventListener('click', () => track.scrollBy({ left: -track.clientWidth, behavior: 'smooth' }));
-      next.addEventListener('click', () => track.scrollBy({ left: track.clientWidth, behavior: 'smooth' }));
+      prev.addEventListener('click', e => { e.stopPropagation(); track.scrollBy({ left: -track.clientWidth, behavior: 'smooth' }); });
+      next.addEventListener('click', e => { e.stopPropagation(); track.scrollBy({ left: track.clientWidth, behavior: 'smooth' }); });
     }
+    if (waBtn){
+      waBtn.addEventListener('click', e => e.stopPropagation());
+    }
+
+    card.addEventListener('click', () => {
+      window.location.hash = `#/seller/${encodeURIComponent(s.id)}`;
+    });
 
     return card;
   }
@@ -404,6 +593,8 @@
     container.innerHTML = `<div class="empty">${msg}</div>`;
   }
 
+  let selectedMood = '';
+
   function applyFilter(){
     const kw = document.getElementById('search').value.trim().toLowerCase();
     const kat = document.getElementById('kategori').value;
@@ -411,7 +602,8 @@
     const hasil = sellers.filter(s => {
       const cocokKw = !kw || (s.nama || '').toLowerCase().includes(kw);
       const cocokKat = !kat || s.kategori === kat;
-      return cocokKw && cocokKat;
+      const cocokMood = !selectedMood || (Array.isArray(s.tag) && s.tag.includes(selectedMood));
+      return cocokKw && cocokKat && cocokMood;
     });
 
     const grid = document.getElementById('grid');
@@ -438,12 +630,136 @@
     });
   }
 
+  const moodQuestions = [
+    'Moodnya lagi pengen apa nih?',
+    'Lagi pengen jajan apa hari ini?',
+    'Mau icip-icip yang mana dulu?',
+    'Kira-kira pengen ngemil apa sekarang?',
+    'Hari ini enaknya jajan yang mana ya?'
+  ];
+
+  function isiMood(){
+    const heading = document.getElementById('mood-question');
+    heading.textContent = moodQuestions[Math.floor(Math.random() * moodQuestions.length)];
+
+    const box = document.getElementById('mood-options');
+    const semuaTag = sellers.flatMap(s => Array.isArray(s.tag) ? s.tag : []);
+    const tagUnik = [...new Set(semuaTag)].sort();
+
+    if (tagUnik.length === 0){
+      document.querySelector('.mood-box').classList.add('hidden');
+      return;
+    }
+
+    box.innerHTML = '';
+    tagUnik.forEach(t => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'mood-chip';
+      btn.textContent = t;
+      btn.addEventListener('click', () => {
+        selectedMood = (selectedMood === t) ? '' : t;
+        box.querySelectorAll('.mood-chip').forEach(c => {
+          c.classList.toggle('active', c.textContent === selectedMood);
+        });
+        applyFilter();
+      });
+      box.appendChild(btn);
+    });
+  }
+
+  function renderDetail(id){
+    const s = sellers.find(x => x.id === id);
+    const detail = document.getElementById('view-detail');
+
+    if (!s){
+      detail.innerHTML = `
+        <a class="back-link" href="#/">← Kembali ke beranda</a>
+        <div class="empty"><p>Toko tidak ditemukan.</p></div>
+      `;
+      return;
+    }
+
+    const semuaFoto = Array.isArray(s.foto) ? s.foto.filter(Boolean) : [];
+    const tags = [s.kategori, ...(Array.isArray(s.tag) ? s.tag : [])].filter(Boolean);
+
+    let galleryHTML;
+    if (semuaFoto.length > 0){
+      galleryHTML = `
+        <div class="detail-photos">
+          <div class="track" id="detail-track">
+            ${semuaFoto.map(src => `<img src="${src}" alt="${s.nama}">`).join('')}
+          </div>
+          ${semuaFoto.length > 1 ? `
+            <button class="nav prev" id="detail-prev" aria-label="Sebelumnya">‹</button>
+            <button class="nav next" id="detail-next" aria-label="Berikutnya">›</button>
+            <div class="dots">
+              ${semuaFoto.map((_, i) => `<span class="dot${i === 0 ? ' active' : ''}"></span>`).join('')}
+            </div>
+          ` : ''}
+        </div>
+      `;
+    } else {
+      galleryHTML = `<div class="detail-photos"><div class="no-photo">Belum ada foto katalog</div></div>`;
+    }
+
+    const logoHTML = s.logo
+      ? `<img class="detail-logo" src="${s.logo}" alt="Logo ${s.nama}">`
+      : `<div class="detail-logo fallback">${initial(s.nama)}</div>`;
+
+    detail.innerHTML = `
+      <a class="back-link" href="#/">← Kembali ke beranda</a>
+      ${galleryHTML}
+      <div class="detail-head">
+        ${logoHTML}
+        <div>
+          <h1>${s.nama || 'Tanpa nama'}</h1>
+          <div class="chip-row">${tags.map(t => `<span class="card-tag">${t}</span>`).join('')}</div>
+        </div>
+      </div>
+      ${s.deskripsi ? `<p class="detail-desc">${s.deskripsi}</p>` : ''}
+      <a class="detail-wa" href="${waLink(s.whatsapp)}" target="_blank" rel="noopener">Chat via WhatsApp</a>
+    `;
+
+    const track = document.getElementById('detail-track');
+    const prev = document.getElementById('detail-prev');
+    const next = document.getElementById('detail-next');
+    const dots = detail.querySelectorAll('.dot');
+
+    if (track && prev && next){
+      prev.addEventListener('click', () => track.scrollBy({ left: -track.clientWidth, behavior: 'smooth' }));
+      next.addEventListener('click', () => track.scrollBy({ left: track.clientWidth, behavior: 'smooth' }));
+      track.addEventListener('scroll', () => {
+        const idx = Math.round(track.scrollLeft / track.clientWidth);
+        dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+      });
+    }
+  }
+
+  function router(){
+    const match = window.location.hash.match(/^#\/seller\/(.+)$/);
+    const home = document.getElementById('view-home');
+    const detail = document.getElementById('view-detail');
+
+    if (match){
+      renderDetail(decodeURIComponent(match[1]));
+      home.classList.add('hidden');
+      detail.classList.remove('hidden');
+    } else {
+      detail.classList.add('hidden');
+      home.classList.remove('hidden');
+    }
+    window.scrollTo(0, 0);
+  }
+
   fetch('data/sellers.json')
     .then(res => res.json())
     .then(data => {
       sellers = Array.isArray(data) ? data : [];
       isiKategori();
+      isiMood();
       applyFilter();
+      router();
     })
     .catch(() => {
       renderEmpty(document.getElementById('grid'), false);
@@ -451,6 +767,7 @@
 
   document.getElementById('search').addEventListener('input', applyFilter);
   document.getElementById('kategori').addEventListener('change', applyFilter);
+  window.addEventListener('hashchange', router);
 </script>
 
 </body>
