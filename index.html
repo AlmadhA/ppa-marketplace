@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PPA Market Place</title>
+<link rel="icon" type="image/png" href="images/logo-ppamarketplace.png">
+<link rel="apple-touch-icon" href="images/logo-ppamarketplace.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -102,6 +104,12 @@
     align-items: center;
     gap: 16px;
     flex-wrap: wrap;
+  }
+
+  .stats-strip{
+    margin: 14px 0 0;
+    font-size: 13px;
+    color: var(--ink-soft);
   }
 
   .site-logo{
@@ -540,6 +548,7 @@
 
     <a class="daftar-btn" href="#" target="_blank" rel="noopener">Daftar jualan di sini</a>
   </div>
+  <p class="stats-strip" id="stats-strip"></p>
 </header>
 
 <main class="wrap">
@@ -649,7 +658,7 @@
           </div>
         </div>
         ${s.deskripsi ? `<div class="card-desc">${s.deskripsi}</div>` : ''}
-        <a class="card-wa" href="${waLink(s.whatsapp)}" target="_blank" rel="noopener">Chat via WhatsApp</a>
+        <a class="card-wa" href="${waLink(s.whatsapp)}" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-2px;margin-right:5px;"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm5.8 14.14c-.24.68-1.19 1.25-1.95 1.41-.52.11-1.2.2-3.48-.75-2.92-1.21-4.8-4.17-4.95-4.36-.14-.19-1.18-1.57-1.18-3 0-1.42.75-2.12 1.01-2.41.26-.29.57-.36.76-.36.19 0 .38 0 .55.01.18.01.41-.07.64.49.24.57.81 1.98.88 2.12.07.15.12.32.02.51-.09.19-.14.31-.28.48-.14.17-.29.37-.42.5-.14.13-.29.28-.12.55.16.27.72 1.19 1.55 1.93 1.06.95 1.96 1.24 2.23 1.38.27.14.43.12.59-.07.16-.19.68-.79.86-1.06.18-.27.36-.22.6-.13.24.09 1.55.73 1.81.86.27.14.45.2.51.32.06.11.06.65-.18 1.33z"/></svg>Chat via WhatsApp</a>
       </div>
     `;
 
@@ -706,6 +715,13 @@
     hasil.forEach(s => grid.appendChild(renderCard(s)));
   }
 
+  function isiStats(){
+    const el = document.getElementById('stats-strip');
+    if (sellers.length === 0){ el.textContent = ''; return; }
+    const jumlahKategori = new Set(sellers.map(s => s.kategori).filter(Boolean)).size;
+    el.textContent = `${sellers.length} usaha terdaftar · ${jumlahKategori} kategori`;
+  }
+
   function isiKategori(){
     const select = document.getElementById('kategori');
     const kategoriUnik = [...new Set(sellers.map(s => s.kategori).filter(Boolean))].sort();
@@ -738,16 +754,24 @@
       return;
     }
 
+    const moodEmoji = {
+      'manis': '🍬', 'gurih': '🍗', 'pedas': '🌶️', 'minuman': '🥤',
+      'makanan': '🍽️', 'kopi': '☕', 'snack': '🍿', 'cemilan': '🍡',
+      'sehat': '🥗', 'jasa': '🛠️'
+    };
+
     box.innerHTML = '';
     tagUnik.forEach(t => {
+      const emoji = moodEmoji[t.toLowerCase()] || '🏷️';
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'mood-chip';
-      btn.textContent = t;
+      btn.dataset.tag = t;
+      btn.textContent = `${emoji} ${t}`;
       btn.addEventListener('click', () => {
         selectedMood = (selectedMood === t) ? '' : t;
         box.querySelectorAll('.mood-chip').forEach(c => {
-          c.classList.toggle('active', c.textContent === selectedMood);
+          c.classList.toggle('active', c.dataset.tag === selectedMood);
         });
         applyFilter();
       });
@@ -805,7 +829,7 @@
         </div>
       </div>
       ${s.deskripsi ? `<p class="detail-desc">${s.deskripsi}</p>` : ''}
-      <a class="detail-wa" href="${waLink(s.whatsapp)}" target="_blank" rel="noopener">Chat via WhatsApp</a>
+      <a class="detail-wa" href="${waLink(s.whatsapp)}" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-2px;margin-right:5px;"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm5.8 14.14c-.24.68-1.19 1.25-1.95 1.41-.52.11-1.2.2-3.48-.75-2.92-1.21-4.8-4.17-4.95-4.36-.14-.19-1.18-1.57-1.18-3 0-1.42.75-2.12 1.01-2.41.26-.29.57-.36.76-.36.19 0 .38 0 .55.01.18.01.41-.07.64.49.24.57.81 1.98.88 2.12.07.15.12.32.02.51-.09.19-.14.31-.28.48-.14.17-.29.37-.42.5-.14.13-.29.28-.12.55.16.27.72 1.19 1.55 1.93 1.06.95 1.96 1.24 2.23 1.38.27.14.43.12.59-.07.16-.19.68-.79.86-1.06.18-.27.36-.22.6-.13.24.09 1.55.73 1.81.86.27.14.45.2.51.32.06.11.06.65-.18 1.33z"/></svg>Chat via WhatsApp</a>
     `;
 
     const track = document.getElementById('detail-track');
@@ -845,6 +869,7 @@
       sellers = Array.isArray(data) ? data : [];
       isiKategori();
       isiMood();
+      isiStats();
       applyFilter();
       router();
 
