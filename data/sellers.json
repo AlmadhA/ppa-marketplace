@@ -23,12 +23,16 @@
     ]
   },
   {
-    "id": "seller-0002",
-    "nama": "PT Pesta Pora Abadi",
-    "kategori": "Jasa",
-    "deskripsi": "Ini contoh data. Ganti dengan deskripsi asli atau hapus blok ini.",
-    "whatsapp": "6281234567891",
+    "id": "batagor-cimol",
+    "nama": "Batagor Cimol Tela",
+    "kategori": "Snack",
+    "deskripsi": "Jual Batagor, Cimol, Tela-tela, pesan lewat WA, tinggal ambil",
+    "whatsapp": "6287861998095",
     "logo": "images/pesta-pora-abadi.png",
-    "foto": []
+    "foto": [
+      "images/batagor-cimol/Katalog/1.jpeg",
+      "images/batagor-cimol/Katalog/2.jpeg",
+      "images/batagor-cimol/Katalog/3.jpeg"
+    ]
   }
 ]
