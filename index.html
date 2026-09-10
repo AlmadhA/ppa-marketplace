@@ -78,6 +78,44 @@
 
   /* ---------- Header ---------- */
 
+  /* ---------- Splash singkat ---------- */
+
+  #loading-screen{
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity .35s ease, visibility .35s ease;
+  }
+  #loading-screen.fade-out{ opacity: 0; visibility: hidden; }
+
+  .loading-logo{
+    width: 74px;
+    height: auto;
+    object-fit: contain;
+    animation: pulse 1.1s infinite ease-in-out;
+  }
+
+  .loading-text{
+    margin-top: 16px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    text-align: center;
+    padding: 0 20px;
+  }
+
+  @keyframes pulse{
+    0%{ transform: scale(1); opacity: .9; }
+    50%{ transform: scale(1.08); opacity: 1; }
+    100%{ transform: scale(1); opacity: .9; }
+  }
+
   header{
     padding: 18px 0;
   }
@@ -338,15 +376,22 @@
     font-size: 14px;
   }
 
-  .badge-ramai{
+  .badge-stack{
     position: absolute;
     top: 10px;
     left: 10px;
     z-index: 3;
     display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .detail-photos .badge-stack{ top: 14px; left: 14px; gap: 8px; }
+
+  .badge-ramai, .badge-baru{
+    display: flex;
     align-items: center;
     gap: 4px;
-    background: var(--pink);
     color: #fff;
     font-family: 'Poppins', sans-serif;
     font-size: 11.5px;
@@ -355,8 +400,10 @@
     border-radius: 999px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.18);
   }
-  .badge-ramai svg{ flex-shrink: 0; }
-  .detail-photos .badge-ramai{ top: 14px; left: 14px; font-size: 13px; padding: 6px 12px 6px 10px; }
+  .badge-ramai{ background: var(--pink); }
+  .badge-baru{ background: var(--green); }
+  .badge-ramai svg, .badge-baru svg{ flex-shrink: 0; }
+  .detail-photos .badge-ramai, .detail-photos .badge-baru{ font-size: 13px; padding: 6px 12px 6px 10px; }
 
   .fav-btn{
     position: absolute;
@@ -691,6 +738,11 @@
 </head>
 <body>
 
+<div id="loading-screen">
+  <img class="loading-logo" src="images/logo-ppamarketplace.png" alt="PPA Market Place">
+  <div class="loading-text">Sebentar ya, toko-tokonya lagi disiapin...</div>
+</div>
+
 <header class="wrap">
   <div class="header-row">
     <img class="site-logo" src="images/logo-ppamarketplace.png" alt="PPA Market Place">
@@ -803,6 +855,25 @@
     return `<span class="badge-ramai"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c1 3-1 4.5-2 6-1.5 2-2 3.5-2 5a4 4 0 0 0 8 0c0-1-.3-1.8-1-2.5.7 2-.3 3.5-1.5 3.5S12 12.5 12.7 11c1-2 1.8-4 1.3-6C17 6.5 19 9 19 13a7 7 0 1 1-14 0c0-4.5 3-7.5 7-11z"/></svg>Lagi Ramai</span>`;
   }
 
+  const BARU_GABUNG_HARI = 14;
+
+  function isBaruGabung(s){
+    if (!s.gabung) return false;
+    const tglGabung = new Date(s.gabung + 'T00:00:00');
+    if (isNaN(tglGabung)) return false;
+    const selisihHari = (Date.now() - tglGabung.getTime()) / (1000 * 60 * 60 * 24);
+    return selisihHari >= 0 && selisihHari <= BARU_GABUNG_HARI;
+  }
+
+  function baruBadge(){
+    return `<span class="badge-baru"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.5 6.5L21 9l-5 4.5L17.5 21 12 17l-5.5 4L8 13.5 3 9l6.5-.5z"/></svg>Baru Gabung</span>`;
+  }
+
+  function badgeStackHTML(s){
+    const badges = [s.ramai ? ramaiBadge() : '', isBaruGabung(s) ? baruBadge() : ''].filter(Boolean).join('');
+    return badges ? `<div class="badge-stack">${badges}</div>` : '';
+  }
+
   function heartIcon(active){
     return `<svg viewBox="0 0 24 24" fill="${active ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M12 21s-6.7-4.3-9.3-8.2C.8 9.8 1.8 6 5 5c2-.6 3.8.3 5 2 1.2-1.7 3-2.6 5-2 3.2 1 4.2 4.8 2.3 7.8C18.7 16.7 12 21 12 21z"/></svg>`;
   }
@@ -874,12 +945,10 @@
       ? `<img class="card-logo" src="${s.logo}" alt="Logo ${s.nama}" style="border-color:${warna.soft}" onerror="this.outerHTML='<div class=\\'card-logo fallback\\'>${initial(s.nama)}</div>'">`
       : `<div class="card-logo fallback">${initial(s.nama)}</div>`;
 
-    const ramaiHTML = s.ramai ? ramaiBadge() : '';
-
     const card = document.createElement('div');
     card.className = 'card';
     card.innerHTML = `
-      <div class="card-photos">${ramaiHTML}${favBtnHTML(s.id)}${photosHTML}</div>
+      <div class="card-photos">${badgeStackHTML(s)}${favBtnHTML(s.id)}${photosHTML}</div>
       <div class="card-body">
         <div class="card-top">
           ${logoHTML}
@@ -1068,13 +1137,11 @@
     const warna = warnaKategori(s.kategori);
     const semuaFoto = Array.isArray(s.foto) ? s.foto.filter(Boolean) : [];
     const tags = [s.kategori, ...(Array.isArray(s.tag) ? s.tag : [])].filter(Boolean);
-    const ramaiHTML = s.ramai ? ramaiBadge() : '';
-
     let galleryHTML;
     if (semuaFoto.length > 0){
       galleryHTML = `
         <div class="detail-photos" style="background:${warna.soft}">
-          ${ramaiHTML}
+          ${badgeStackHTML(s)}
           ${favBtnHTML(s.id)}
           <div class="track" id="detail-track">
             ${semuaFoto.map((src, i) => `<img class="blur-load" src="${src}" alt="${s.nama}" loading="${i === 0 ? 'eager' : 'lazy'}">`).join('')}
@@ -1089,7 +1156,7 @@
         </div>
       `;
     } else {
-      galleryHTML = `<div class="detail-photos" style="background:${warna.soft};color:${warna.ink}">${ramaiHTML}${favBtnHTML(s.id)}<div class="no-photo">Belum ada foto katalog</div></div>`;
+      galleryHTML = `<div class="detail-photos" style="background:${warna.soft};color:${warna.ink}">${badgeStackHTML(s)}${favBtnHTML(s.id)}<div class="no-photo">Belum ada foto katalog</div></div>`;
     }
 
     const logoHTML = s.logo
@@ -1156,7 +1223,22 @@
     window.scrollTo(0, 0);
   }
 
+  const SPLASH_MIN = 700;
+  const SPLASH_MAX = 2500;
+  const splashStart = Date.now();
+  let splashFaded = false;
+
+  function fadeSplash(){
+    if (splashFaded) return;
+    splashFaded = true;
+    const loader = document.getElementById('loading-screen');
+    if (!loader) return;
+    loader.classList.add('fade-out');
+    setTimeout(() => { loader.style.display = 'none'; }, 400);
+  }
+
   renderSkeletons(document.getElementById('grid'), 6);
+  setTimeout(fadeSplash, SPLASH_MAX);
 
   fetch('data/sellers.json')
     .then(res => res.json())
@@ -1168,10 +1250,13 @@
       isiStats();
       applyFilter();
       router();
+      const sisaWaktu = Math.max(0, SPLASH_MIN - (Date.now() - splashStart));
+      setTimeout(fadeSplash, sisaWaktu);
     })
     .catch(() => {
       sellers = [];
       renderEmpty(document.getElementById('grid'), false);
+      fadeSplash();
     });
 
   document.getElementById('search').addEventListener('input', applyFilter);
