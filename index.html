@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="images/logo-ppamarketplace.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600&family=Caveat:wght@600&display=swap" rel="stylesheet">
 <style>
 
   /* ================================================================
@@ -28,10 +28,11 @@
      ================================================================ */
 
   :root{
-    --bg: #fcfcfb;
-    --ink: #1a1a1e;
-    --ink-soft: #74747c;
-    --line: #e6e6ea;
+    --bg: #f1faf7;
+    --ink: #1c2230;
+    --ink-soft: #5b6472;
+    --line: #d8e6e1;
+    --line-strong: rgba(28,34,48,0.85);
     --card-bg: #ffffff;
 
     --pink: #e31c7f;
@@ -39,20 +40,20 @@
     --pink-soft: #fdeaf3;
     --pink-ink: #a3115e;
 
-    --cyan: #14a7c9;
+    --cyan: #0e8fa8;
     --cyan-soft: #e4f6fa;
     --cyan-ink: #0d7a93;
 
-    --amber: #e2a12b;
+    --amber: #d99012;
     --amber-soft: #fbf1de;
     --amber-ink: #8a5a0b;
 
-    --green: #4f9d5c;
+    --green: #3f9153;
     --green-soft: #e8f5ea;
     --green-ink: #2f6b39;
 
-    --shadow-card: 0 1px 2px rgba(20,20,25,0.04);
-    --shadow-hover: 0 10px 24px rgba(20,20,25,0.10);
+    --shadow-card: none;
+    --shadow-hover: 0 8px 0 0 var(--ink);
   }
 
   *{ box-sizing: border-box; }
@@ -102,7 +103,7 @@
 
   .loading-text{
     margin-top: 16px;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Fredoka', sans-serif;
     font-size: 14px;
     font-weight: 500;
     color: var(--ink-soft);
@@ -136,7 +137,7 @@
   }
 
   .site-title{
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Fredoka', sans-serif;
     font-weight: 700;
     font-size: 17px;
     letter-spacing: -0.01em;
@@ -165,15 +166,44 @@
   /* ---------- Hero / mood ---------- */
 
   .hero{
-    background: var(--pink-soft);
-    border-radius: 22px;
-    padding: 30px 26px 26px;
-    margin: 4px 0 20px;
+    position: relative;
+    background: #fff;
+    border: 2px solid var(--line-strong);
+    border-radius: 16px 16px 0 0;
+    padding: 30px 26px 34px;
+    margin: 4px 0 34px;
+  }
+
+  .hero::after{
+    content: '';
+    position: absolute;
+    left: -2px;
+    right: -2px;
+    bottom: -11px;
+    height: 12px;
+    background:
+      repeating-linear-gradient(-45deg, var(--bg) 0 6px, transparent 6px 12px),
+      repeating-linear-gradient(45deg, var(--bg) 0 6px, transparent 6px 12px);
+    background-position: left top, left bottom;
+    background-size: 100% 50%;
+    background-repeat: repeat-x;
+    border-left: 2px solid var(--line-strong);
+    border-right: 2px solid var(--line-strong);
+  }
+
+  .hero-note{
+    display: inline-block;
+    font-family: 'Caveat', cursive;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--pink);
+    transform: rotate(-3deg);
+    margin: 0 0 2px;
   }
 
   .hero-title{
-    font-family: 'Poppins', sans-serif;
-    font-weight: 800;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 700;
     font-size: 30px;
     line-height: 1.2;
     letter-spacing: -0.02em;
@@ -199,17 +229,18 @@
     font-weight: 500;
     padding: 9px 17px;
     border-radius: 999px;
-    border: none;
+    border: 1.5px solid var(--line-strong);
     background: #fff;
     color: var(--ink);
     cursor: pointer;
-    transition: transform .15s ease, background .15s ease, color .15s ease;
+    transition: transform .15s ease, background .15s ease, color .15s ease, border-color .15s ease;
   }
 
   .mood-chip:hover{ transform: translateY(-1px); }
 
   .mood-chip.active{
     background: var(--pink);
+    border-color: var(--pink);
     color: #fff;
     transform: scale(1.05);
   }
@@ -299,21 +330,33 @@
   }
 
   .card{
-    border: 1px solid var(--line);
-    border-radius: 18px;
+    position: relative;
+    border: 2px solid var(--line-strong);
+    border-radius: 14px;
     background: var(--card-bg);
     overflow: hidden;
     display: flex;
     flex-direction: column;
     box-shadow: var(--shadow-card);
     cursor: pointer;
-    transition: box-shadow .18s ease, transform .18s ease, border-color .18s ease;
+    transition: box-shadow .15s ease, transform .15s ease;
+  }
+
+  .card::after{
+    content: '';
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    width: 26px;
+    height: 26px;
+    background: var(--kat-color, var(--cyan));
+    clip-path: polygon(100% 0, 0 0, 100% 100%);
+    z-index: 2;
   }
 
   .card:hover{
     box-shadow: var(--shadow-hover);
-    transform: translateY(-3px);
-    border-color: var(--line);
+    transform: translate(-4px, -4px);
   }
 
   .card-photos{
@@ -371,7 +414,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Fredoka', sans-serif;
     font-weight: 600;
     font-size: 14px;
   }
@@ -393,17 +436,18 @@
     align-items: center;
     gap: 4px;
     color: #fff;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Fredoka', sans-serif;
     font-size: 11.5px;
     font-weight: 600;
-    padding: 5px 10px 5px 8px;
+    padding: 5px 11px 5px 9px;
     border-radius: 999px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+    border: 1.5px dashed rgba(255,255,255,0.75);
+    transform: rotate(-5deg);
   }
   .badge-ramai{ background: var(--pink); }
-  .badge-baru{ background: var(--green); }
+  .badge-baru{ background: var(--green); transform: rotate(4deg); }
   .badge-ramai svg, .badge-baru svg{ flex-shrink: 0; }
-  .detail-photos .badge-ramai, .detail-photos .badge-baru{ font-size: 13px; padding: 6px 12px 6px 10px; }
+  .detail-photos .badge-ramai, .detail-photos .badge-baru{ font-size: 13px; padding: 6px 13px 6px 11px; }
 
   .fav-btn{
     position: absolute;
@@ -457,7 +501,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Fredoka', sans-serif;
     font-weight: 700;
     font-size: 14px;
   }
@@ -465,14 +509,28 @@
   .card-name{ font-weight: 600; font-size: 15.5px; }
 
   .card-tag{
+    position: relative;
     font-size: 12px;
-    padding: 3px 10px;
-    border-radius: 999px;
+    padding: 3px 12px 3px 16px;
+    border-radius: 0 999px 999px 0;
     display: inline-flex;
     align-items: center;
     gap: 4px;
     width: fit-content;
     font-weight: 600;
+    color: #fff;
+  }
+
+  .card-tag::before{
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.85);
   }
 
   .card-desc{
@@ -582,7 +640,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Fredoka', sans-serif;
     font-weight: 600;
   }
 
@@ -629,14 +687,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Fredoka', sans-serif;
     font-weight: 700;
     font-size: 20px;
   }
 
   .detail-head h1{
-    font-family: 'Poppins', sans-serif;
-    font-weight: 800;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 700;
     font-size: 25px;
     margin: 0 0 6px;
     letter-spacing: -0.01em;
@@ -704,7 +762,7 @@
 
   .empty .empty-emoji{ font-size: 34px; margin-bottom: 10px; }
   .empty p{ margin: 6px 0; }
-  .empty .empty-title{ font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 17px; color: var(--ink); }
+  .empty .empty-title{ font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 17px; color: var(--ink); }
 
   .empty-cta{
     display: inline-block;
@@ -757,6 +815,7 @@
   <div id="view-home">
 
     <section class="hero">
+      <span class="hero-note">psst, klik sesuai mood ya~</span>
       <h1 class="hero-title" id="mood-question">Moodnya lagi pengen apa nih?</h1>
       <p class="hero-sub">Jajanan &amp; jasa warga PPA, tinggal chat WhatsApp</p>
       <div class="mood-options" id="mood-options"></div>
@@ -830,10 +889,10 @@
   }
 
   const palet = [
-    { soft: 'var(--pink-soft)', ink: 'var(--pink-ink)' },
-    { soft: 'var(--cyan-soft)', ink: 'var(--cyan-ink)' },
-    { soft: 'var(--amber-soft)', ink: 'var(--amber-ink)' },
-    { soft: 'var(--green-soft)', ink: 'var(--green-ink)' }
+    { solid: 'var(--pink)', soft: 'var(--pink-soft)', ink: 'var(--pink-ink)' },
+    { solid: 'var(--cyan)', soft: 'var(--cyan-soft)', ink: 'var(--cyan-ink)' },
+    { solid: 'var(--amber)', soft: 'var(--amber-soft)', ink: 'var(--amber-ink)' },
+    { solid: 'var(--green)', soft: 'var(--green-soft)', ink: 'var(--green-ink)' }
   ];
 
   function warnaKategori(kat){
@@ -947,6 +1006,7 @@
 
     const card = document.createElement('div');
     card.className = 'card';
+    card.style.setProperty('--kat-color', warna.solid);
     card.innerHTML = `
       <div class="card-photos">${badgeStackHTML(s)}${favBtnHTML(s.id)}${photosHTML}</div>
       <div class="card-body">
@@ -954,7 +1014,7 @@
           ${logoHTML}
           <div>
             <div class="card-name">${s.nama || 'Tanpa nama'}</div>
-            ${s.kategori ? `<span class="card-tag" style="background:${warna.soft};color:${warna.ink}">${emojiFor(kategoriEmoji, s.kategori)} ${s.kategori}</span>` : ''}
+            ${s.kategori ? `<span class="card-tag" style="background:${warna.solid}">${emojiFor(kategoriEmoji, s.kategori)} ${s.kategori}</span>` : ''}
           </div>
         </div>
         ${s.deskripsi ? `<div class="card-desc">${s.deskripsi}</div>` : ''}
@@ -1170,7 +1230,7 @@
         ${logoHTML}
         <div>
           <h1>${s.nama || 'Tanpa nama'}</h1>
-          <div class="chip-row">${tags.map(t => `<span class="card-tag" style="background:${warna.soft};color:${warna.ink}">${t}</span>`).join('')}</div>
+          <div class="chip-row">${tags.map(t => `<span class="card-tag" style="background:${warna.solid}">${t}</span>`).join('')}</div>
         </div>
       </div>
       ${s.deskripsi ? `<p class="detail-desc">${s.deskripsi}</p>` : ''}
